@@ -1,0 +1,61 @@
+name: Deploy to GitHub Pages
+
+on:
+  # 月1回の定期実行 (毎月1日の午前0時 UTC / 午前9時 JST)
+  schedule:
+    - cron: '0 0 1 * *'
+  # GitHubの管理画面から手動で実行可能にする
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    concurrency:
+      group: gitflow-deploy
+      cancel-in-progress: true
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Fetch event data from Google Sheets
+        run: |
+          # SPREADSHEET_CSV_URL が Secrets に設定されている場合はそれを利用、
+          # 設定されていない場合はリポジトリ内の events.csv（ダミーデータ）をそのまま利用
+          if [ -n "${{ secrets.SPREADSHEET_CSV_URL }}" ]; then
+            echo "Fetching data from Google Sheets..."
+            curl -L -o src/data/events.csv "${{ secrets.SPREADSHEET_CSV_URL }}"
+          else
+            echo "No SPREADSHEET_CSV_URL Secret found. Using default/existing events.csv."
+          fi
+
+      - name: Build static site
+        run: npm run build
+
+      - name: Create CNAME file for custom domain
+        # CUSTOM_DOMAIN が Secrets に設定されている場合のみ CNAME ファイルを作成
+        run: |
+          if [ -n "${{ secrets.CUSTOM_DOMAIN }}" ]; then
+            echo "Creating CNAME file for ${{ secrets.CUSTOM_DOMAIN }}..."
+            echo "${{ secrets.CUSTOM_DOMAIN }}" > dist/CNAME
+          else
+            echo "No CUSTOM_DOMAIN Secret found. Skipping CNAME creation."
+          fi
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: dist
+          branch: gh-pages
