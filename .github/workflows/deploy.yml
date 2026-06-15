@@ -1,11 +1,19 @@
 name: Deploy to GitHub Pages
 
 on:
+  # mainブランチへのプッシュ時に自動デプロイ
+  push:
+    branches:
+      - main
   # 月1回の定期実行 (毎月1日の午前0時 UTC / 午前9時 JST)
   schedule:
     - cron: '0 0 1 * *'
   # GitHubの管理画面から手動で実行可能にする
   workflow_dispatch:
+
+# Node.js 20 アクション非推奨の警告を解消する設定
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 
 permissions:
   contents: write
