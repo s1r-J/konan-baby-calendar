@@ -744,13 +744,13 @@ a.tag:hover {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 8px 16px;
+  padding: 6px 12px;
   background-color: var(--color-primary-light);
   color: var(--color-primary-dark);
-  font-size: 0.8rem;
+  font-size: 0.72rem;
   font-weight: 600;
   text-decoration: none;
-  border-radius: 12px;
+  border-radius: 8px;
   transition: var(--transition-smooth);
   border: 1px solid rgba(255, 138, 117, 0.2);
 }

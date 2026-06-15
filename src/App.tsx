@@ -161,7 +161,7 @@ export default function App() {
         <div className="header-top">
           <div className="app-title-group">
             <div className="app-logo" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <img src="/logo.png" alt="logo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+              <img src="./logo.png" alt="logo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
             </div>
             <div>
               <h1 className="app-title">sasage baby calendar</h1>
