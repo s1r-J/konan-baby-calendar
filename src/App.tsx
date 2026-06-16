@@ -95,7 +95,7 @@ export default function App() {
           return event.target0yo;
         }
         if (targetFilter === '6months') {
-          return event.target6months;
+          return event.target6months && !event.target0yo;
         }
         if (targetFilter === '1yo') {
           return event.target1yo;
