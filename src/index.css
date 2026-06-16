@@ -867,3 +867,119 @@ a.tag:hover {
     padding: 1px !important;
   }
 }
+
+/* PWA インストール案内トースト */
+.pwa-prompt-toast {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 32px);
+  max-width: 500px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 138, 117, 0.3);
+  border-radius: 16px;
+  padding: 12px 14px;
+  box-shadow: var(--shadow-lg);
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  animation: slideUpFade 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes slideUpFade {
+  from {
+    transform: translate(-50%, 20px);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
+}
+
+.pwa-prompt-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.pwa-prompt-icon-area {
+  flex-shrink: 0;
+}
+
+.pwa-prompt-app-logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  object-fit: cover;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border);
+}
+
+.pwa-prompt-text-area {
+  flex: 1;
+}
+
+.pwa-prompt-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+  margin-bottom: 2px;
+}
+
+.pwa-prompt-desc {
+  font-size: 0.7rem;
+  color: var(--color-text-sub);
+  line-height: 1.35;
+}
+
+.pwa-prompt-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pwa-prompt-install-btn {
+  background: var(--color-primary);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+  transition: var(--transition-smooth);
+}
+
+.pwa-prompt-install-btn:hover {
+  background: var(--color-primary-dark);
+}
+
+.pwa-prompt-close-btn {
+  background: transparent;
+  border: none;
+  color: var(--color-text-sub);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: var(--transition-smooth);
+}
+
+.pwa-prompt-close-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--color-text-main);
+}
+

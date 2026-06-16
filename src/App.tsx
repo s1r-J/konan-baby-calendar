@@ -3,6 +3,7 @@ import { CalendarDays, List, Heart, Filter, ChevronDown, ChevronUp, AlertTriangl
 import { loadEvents, BabyEvent } from './utils/csvParser';
 import { CalendarView } from './components/CalendarView';
 import { ListView } from './components/ListView';
+import { PWAInstallPrompt } from './components/PWAInstallPrompt';
 
 type TabType = 'calendar' | 'list' | 'favorite';
 type TargetFilterType = 'all' | '6months' | '0yo' | '1yo' | '2yo' | '3yo+' | 'papa' | 'pre_parent';
@@ -429,6 +430,7 @@ export default function App() {
           <span>GitHub</span>
         </a>
       </div>
+      <PWAInstallPrompt />
     </div>
   );
 }
