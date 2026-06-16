@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { CalendarDays, List, Heart, Filter, ChevronDown, ChevronUp, AlertTriangle } from 'lucide-react';
+import { CalendarDays, List, Heart, Filter, ChevronDown, ChevronUp, AlertTriangle, X } from 'lucide-react';
 import { loadEvents, BabyEvent } from './utils/csvParser';
 import { CalendarView } from './components/CalendarView';
 import { ListView } from './components/ListView';
@@ -200,24 +200,39 @@ export default function App() {
 
       {/* メインコンテンツ */}
       <main className="main-content">
-        {/* フィルター開閉ボタン */}
-        <div className="filter-toggle-container" style={{ marginBottom: '16px' }}>
-          <button 
-            className={`filter-toggle-btn ${hasActiveFilter ? 'has-active' : ''} ${isFilterOpen ? 'open' : ''}`}
-            onClick={() => setIsFilterOpen(!isFilterOpen)}
-          >
-            <div className="filter-toggle-left">
-              <Filter size={14} />
-              <span>絞り込み条件を指定</span>
-              {hasActiveFilter && <span className="filter-active-badge">適用中</span>}
-            </div>
-            {isFilterOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-          </button>
-        </div>
+        {/* フィルターアコーディオンカード */}
+        <div className={`filter-card-container ${isFilterOpen ? 'open' : ''} ${hasActiveFilter ? 'has-active' : ''}`}>
+          <div className="filter-toggle-row">
+            <button 
+              className="filter-toggle-btn-new"
+              onClick={() => setIsFilterOpen(!isFilterOpen)}
+            >
+              <div className="filter-toggle-left">
+                <Filter size={14} />
+                <span>絞り込み条件を指定</span>
+                {hasActiveFilter && <span className="filter-active-badge">適用中</span>}
+              </div>
+              {isFilterOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+            </button>
+            
+            {hasActiveFilter && (
+              <button 
+                className="filter-clear-btn-new"
+                onClick={() => {
+                  setTargetFilter('all');
+                  setFacilityFilter('all');
+                  setSignupFilter('all');
+                  setFeeFilter('all');
+                }}
+              >
+                <X size={12} />
+                <span>クリア</span>
+              </button>
+            )}
+          </div>
 
-        {/* フィルターセクション */}
-        {isFilterOpen && (
-          <section className="filter-section">
+          {isFilterOpen && (
+            <section className="filter-section-new">
             {/* 対象年齢フィルター */}
             <div className="filter-group">
               <span className="filter-label">対象で絞り込み</span>
@@ -346,6 +361,7 @@ export default function App() {
             </div>
           </section>
         )}
+        </div>
 
         {/* ビューのレンダリング */}
         {activeTab === 'calendar' ? (
