@@ -76,9 +76,16 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
   const minYear = limitDate.getFullYear();
   const minMonth = limitDate.getMonth() + 1; // 1-12
 
+  const getTodayStr = () => {
+    const y = today.getFullYear();
+    const m = String(today.getMonth() + 1).padStart(2, '0');
+    const d = String(today.getDate()).padStart(2, '0');
+    return `${y}/${m}/${d}`;
+  };
+
   const [currentYear, setCurrentYear] = useState<number>(today.getFullYear());
   const [currentMonth, setCurrentMonth] = useState<number>(today.getMonth() + 1); // 1-12
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [selectedDate, setSelectedDate] = useState<string | null>(getTodayStr());
   const [modalEvents, setModalEvents] = useState<BabyEvent[]>([]);
   const [eventMap, setEventMap] = useState<Record<string, BabyEvent[]>>({});
 
