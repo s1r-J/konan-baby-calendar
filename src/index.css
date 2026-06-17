@@ -689,6 +689,10 @@ a.tag:hover {
   background-color: #e3f2fd !important; /* 薄い青 */
   color: #1565c0 !important; /* 濃い青 */
 }
+.loc-badge-yokodai {
+  background-color: #f3e5f5 !important; /* 薄い紫 */
+  color: #7b1fa2 !important; /* 濃い紫 */
+}
 .loc-badge-default {
   background-color: #f1ede9 !important; /* 薄いグレー */
   color: var(--color-text-main) !important;
@@ -700,6 +704,7 @@ a.tag:hover {
 .dot-hishita { background-color: #ff9800 !important; } /* オレンジ */
 .dot-isopiyo { background-color: #fcc419 !important; } /* 黄 */
 .dot-byobugaura { background-color: #2196f3 !important; } /* 青 */
+.dot-yokodai { background-color: #9c27b0 !important; } /* 紫 */
 .dot-default { background-color: var(--color-text-sub) !important; }
 
 

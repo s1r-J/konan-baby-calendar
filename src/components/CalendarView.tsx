@@ -15,6 +15,7 @@ const FACILITY_URLS: Record<string, string> = {
   'いそピヨ': 'https://isopiyo-isogo.com/',
   '屛風ヶ浦地域ケアプラザ': 'https://www.shinkoufukushikai.com/care/care-plaza/byobugaura',
   '屏風ヶ浦地域ケアプラザ': 'https://www.shinkoufukushikai.com/care/care-plaza/byobugaura',
+  '洋光台地域ケアプラザ': 'https://www.y-chojukai.or.jp/youkoudai/',
 };
 
 const getFacilityUrl = (facility: string): string | null => {
@@ -43,6 +44,9 @@ const getFacilityClass = (facility: string) => {
   }
   if (facility.includes('屏風') || facility.includes('屛風')) {
     return 'loc-badge-byobugaura';
+  }
+  if (facility.includes('洋光台')) {
+    return 'loc-badge-yokodai';
   }
   return 'loc-badge-default';
 };
