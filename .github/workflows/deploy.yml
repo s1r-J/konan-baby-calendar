@@ -32,7 +32,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'npm'
 
       - name: Install dependencies
@@ -40,6 +40,8 @@ jobs:
 
       - name: Fetch event data from Google Sheets
         run: |
+          # ディレクトリを作成して curl の書き込みエラー (exit code 23) を防ぐ
+          mkdir -p src/data
           # SPREADSHEET_CSV_URL が Secrets に設定されている場合はそれを利用、
           # 設定されていない場合はリポジトリ内の events.csv（ダミーデータ）をそのまま利用
           if [ -n "${{ secrets.SPREADSHEET_CSV_URL }}" ]; then
