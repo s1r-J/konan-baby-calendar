@@ -52,6 +52,9 @@ jobs:
       - name: Build static site
         run: npm run build
 
+      - name: Copy CSV to dist for verification
+        run: cp src/data/events.csv dist/events.csv
+
       - name: Create CNAME file for custom domain
         # CUSTOM_DOMAIN が Secrets に設定されている場合のみ CNAME ファイルを作成
         run: |
