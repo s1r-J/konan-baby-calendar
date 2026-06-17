@@ -184,21 +184,21 @@ export default function App() {
             className={`tab-btn ${activeTab === 'calendar' ? 'active' : ''}`}
             onClick={() => setActiveTab('calendar')}
           >
-            <CalendarDays size={16} />
+            <CalendarDays size={14} />
             カレンダー
           </button>
           <button 
             className={`tab-btn ${activeTab === 'list' ? 'active' : ''}`}
             onClick={() => setActiveTab('list')}
           >
-            <List size={16} />
+            <List size={14} />
             リスト表示
           </button>
           <button 
             className={`tab-btn ${activeTab === 'favorite' ? 'active' : ''}`}
             onClick={() => setActiveTab('favorite')}
           >
-            <Heart size={16} fill={activeTab === 'favorite' ? 'currentColor' : 'none'} />
+            <Heart size={14} fill={activeTab === 'favorite' ? 'currentColor' : 'none'} />
             お気に入り ({favorites.length})
           </button>
         </div>

@@ -130,16 +130,16 @@ body {
   background: #f1ede9;
   border-radius: 14px;
   padding: 4px;
-  margin-top: 8px;
+  margin-top: 6px;
 }
 
 .tab-btn {
   flex: 1;
   border: none;
   background: transparent;
-  padding: 10px 0;
+  padding: 8px 0;
   font-family: var(--font-family);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 600;
   color: var(--color-text-sub);
   border-radius: 10px;
@@ -147,7 +147,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 4px;
   transition: var(--transition-smooth);
 }
 
