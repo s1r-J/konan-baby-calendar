@@ -336,13 +336,13 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
         </div>
       </div>
 
-      <div id="selected-day-events" className="calendar-selected-day-events" style={{ marginTop: '24px' }}>
+      <div id="selected-day-events" className="calendar-selected-day-events" style={{ marginTop: '12px' }}>
         {selectedDate ? (
           <div>
             <h3 style={{ 
               fontSize: '1.05rem', 
               fontWeight: 700, 
-              marginBottom: '16px', 
+              marginBottom: '8px', 
               paddingLeft: '10px', 
               borderLeft: '4px solid var(--color-primary)',
               color: 'var(--color-text-main)' 
@@ -350,7 +350,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
               {selectedDate.replace(/\//g, '年').replace(/年(\d+)年/, '年$1月') + '日'} のイベント
             </h3>
             {modalEvents.length > 0 ? (
-              <div className="modal-event-list" style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              <div className="modal-event-list" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 {modalEvents.map((event) => {
                   const isFav = favorites.includes(event.id);
                   const isSignupRequired = event.requiredSignup.includes('申込') || event.requiredSignup.includes('予約制');
