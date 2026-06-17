@@ -171,7 +171,7 @@ export default function App() {
             </div>
             <div>
               <h1 className="app-title">sasage baby calendar</h1>
-              <p className="app-subtitle">港南区周辺 子育てイベント情報</p>
+              <p className="app-subtitle">港南区笹下周辺 子育てイベント情報</p>
             </div>
           </div>
         </div>
@@ -386,7 +386,7 @@ export default function App() {
 
         <div className="app-disclaimer-box" style={{ marginTop: '32px' }}>
           <AlertTriangle size={14} />
-          <span>当サイトは港南区周辺の子育て支援拠点のイベント情報を独自に収集している個人サイトであり、情報が正確ではない可能性があります。最新の正確な情報は必ず公式情報をご確認ください。</span>
+          <span>当サイトは港南区笹下周辺の子育て支援拠点のイベント情報を独自に収集している個人サイトであり、情報が正確ではない可能性があります。最新の正確な情報は必ず公式情報をご確認ください。</span>
         </div>
 
         <div className="footer-links-container">

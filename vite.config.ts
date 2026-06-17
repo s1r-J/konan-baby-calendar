@@ -20,7 +20,7 @@ export default defineConfig({
       manifest: {
         name: 'sasage baby calendar',
         short_name: 'sasage baby',
-        description: '港南区周辺 子育てイベント情報カレンダー',
+        description: '港南区笹下周辺 子育てイベント情報カレンダー',
         theme_color: '#ff8a75',
         background_color: '#FAF9F6',
         display: 'standalone',
