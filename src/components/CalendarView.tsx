@@ -80,6 +80,12 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
   const minYear = limitDate.getFullYear();
   const minMonth = limitDate.getMonth() + 1; // 1-12
 
+  // 今日から2ヶ月先の限界年月を計算
+  const maxLimitDate = new Date();
+  maxLimitDate.setMonth(maxLimitDate.getMonth() + 2);
+  const maxYear = maxLimitDate.getFullYear();
+  const maxMonth = maxLimitDate.getMonth() + 1; // 1-12
+
   const getTodayStr = () => {
     const y = today.getFullYear();
     const m = String(today.getMonth() + 1).padStart(2, '0');
@@ -137,12 +143,20 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
   };
 
   const handleNextMonth = () => {
+    let nextMonth = currentMonth + 1;
+    let nextYear = currentYear;
     if (currentMonth === 12) {
-      setCurrentMonth(1);
-      setCurrentYear(currentYear + 1);
-    } else {
-      setCurrentMonth(currentMonth + 1);
+      nextMonth = 1;
+      nextYear = currentYear + 1;
     }
+
+    // 限界月より後になる場合は遷移させない
+    if (nextYear > maxYear || (nextYear === maxYear && nextMonth > maxMonth)) {
+      return;
+    }
+
+    setCurrentMonth(nextMonth);
+    setCurrentYear(nextYear);
     setSelectedDate(null);
     setModalEvents([]);
   };
@@ -213,6 +227,14 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
   }
   const isPrevDisabled = prevYearVal < minYear || (prevYearVal === minYear && prevMonthVal < minMonth);
 
+  let nextMonthVal = currentMonth + 1;
+  let nextYearVal = currentYear;
+  if (currentMonth === 12) {
+    nextMonthVal = 1;
+    nextYearVal = currentYear + 1;
+  }
+  const isNextDisabled = nextYearVal > maxYear || (nextYearVal === maxYear && nextMonthVal > maxMonth);
+
   const cells = generateCalendarCells();
   const weekDays = ['日', '月', '火', '水', '木', '金', '土'];
 
@@ -230,7 +252,13 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
             <ChevronLeft size={20} />
           </button>
           <span className="current-month">{currentYear}年 {currentMonth}月</span>
-          <button onClick={handleNextMonth} className="month-nav-btn" aria-label="次月">
+          <button 
+            onClick={handleNextMonth} 
+            className="month-nav-btn" 
+            aria-label="次月"
+            disabled={isNextDisabled}
+            style={isNextDisabled ? { opacity: 0.3, cursor: 'not-allowed' } : {}}
+          >
             <ChevronRight size={20} />
           </button>
         </div>

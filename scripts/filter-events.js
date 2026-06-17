@@ -13,7 +13,13 @@ const oneMonthAgo = new Date();
 oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
 oneMonthAgo.setHours(0, 0, 0, 0);
 
-console.log(`[Filter] Removing events older than: ${oneMonthAgo.toLocaleDateString()}`);
+// 今日から2ヶ月先の月末を計算
+const twoMonthsLater = new Date();
+twoMonthsLater.setMonth(twoMonthsLater.getMonth() + 2);
+const twoMonthsLaterEnd = new Date(twoMonthsLater.getFullYear(), twoMonthsLater.getMonth() + 1, 0);
+twoMonthsLaterEnd.setHours(23, 59, 59, 999);
+
+console.log(`[Filter] Date range limit: ${oneMonthAgo.toLocaleDateString()} to ${twoMonthsLaterEnd.toLocaleDateString()}`);
 
 if (!fs.existsSync(csvFilePath)) {
   console.error(`Error: File not found at ${csvFilePath}`);
@@ -172,7 +178,7 @@ for (let i = cleanDataRows.length - 1; i >= 0; i--) {
 // 元の順序に戻す
 uniqueRows.reverse();
 
-// 過去1ヶ月より古いイベントのフィルタリング
+// 過去1ヶ月より古いイベントおよび2ヶ月先月末より未来のイベントのフィルタリング
 const finalRows = [header];
 let filteredCount = 0;
 
@@ -181,7 +187,7 @@ for (const row of uniqueRows) {
   if (dateStr) {
     const eventDate = new Date(dateStr.replace(/-/g, '/'));
     if (!isNaN(eventDate.getTime())) {
-      if (eventDate >= oneMonthAgo) {
+      if (eventDate >= oneMonthAgo && eventDate <= twoMonthsLaterEnd) {
         finalRows.push(row);
       } else {
         filteredCount++;
@@ -203,4 +209,4 @@ fs.writeFileSync(csvFilePath, updatedCsvText + '\n', 'utf-8');
 
 console.log(`[Auto-Fix] Completed. Fixed ${autoFixCount} rows.`);
 console.log(`[Deduplicate] Removed ${duplicateCount} duplicate events.`);
-console.log(`[Filter] Completed. Removed ${filteredCount} old events.`);
+console.log(`[Filter] Completed. Removed ${filteredCount} old/future events.`);

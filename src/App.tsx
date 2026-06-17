@@ -31,15 +31,20 @@ export default function App() {
   useEffect(() => {
     const events = loadEvents();
     
-    // 今日から1ヶ月前の基準日を計算
+    // 今日から1ヶ月前の基準日と、2ヶ月先の月末を計算
     const oneMonthAgo = new Date();
     oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
     oneMonthAgo.setHours(0, 0, 0, 0);
 
-    // 1ヶ月前以降のイベントのみを残す
+    const twoMonthsLater = new Date();
+    twoMonthsLater.setMonth(twoMonthsLater.getMonth() + 2);
+    const twoMonthsLaterEnd = new Date(twoMonthsLater.getFullYear(), twoMonthsLater.getMonth() + 1, 0);
+    twoMonthsLaterEnd.setHours(23, 59, 59, 999);
+
+    // 1ヶ月前〜2ヶ月先月末のイベントのみを残す
     const activeEvents = events.filter((event) => {
       const eventDate = new Date(event.date.replace(/-/g, '/'));
-      return eventDate >= oneMonthAgo;
+      return eventDate >= oneMonthAgo && eventDate <= twoMonthsLaterEnd;
     });
 
     const sorted = [...activeEvents].sort((a, b) => a.date.localeCompare(b.date));
