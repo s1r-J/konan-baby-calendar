@@ -37,9 +37,11 @@ export const loadEvents = (): BabyEvent[] => {
   }
 
   // スプレッドシートのヘッダー名と一致するキーでマッピング
-  return (parsed.data as any[]).map((row, index) => {
+  return (parsed.data as any[]).map((row) => {
     const date = row['日付']?.trim() || '';
     const title = row['イベント名']?.trim() || '';
+    const facility = row['施設名']?.trim() || '';
+    const startTime = row['開始時刻']?.trim() || '';
     
     // 日付から曜日を自動計算 (例: "2026/06/03" -> "水")
     let dayOfWeek = '';
@@ -52,12 +54,12 @@ export const loadEvents = (): BabyEvent[] => {
     }
     
     return {
-      id: `${date}-${title}-${index}`,
+      id: `${date}-${facility}-${title}-${startTime}`,
       date,
       dayOfWeek,
-      facility: row['施設名']?.trim() || '',
+      facility,
       title,
-      startTime: row['開始時刻']?.trim() || '',
+      startTime,
       endTime: row['終了時刻']?.trim() || '',
       location: row['開催場所']?.trim() || '',
       target0yo: row['対象:0歳']?.trim().toUpperCase() === 'TRUE',
