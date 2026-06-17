@@ -483,7 +483,7 @@ a.tag:hover {
 }
 
 .calendar-day-cell {
-  min-height: 70px;
+  min-height: 95px;
   min-width: 0; /* 列幅がテキスト長で押し広げられるのを防ぐ */
   background: var(--color-bg);
   border-radius: 12px;
@@ -552,6 +552,10 @@ a.tag:hover {
   border-color: var(--color-primary);
 }
 
+.calendar-selected-day-events {
+  scroll-margin-top: 140px;
+  padding-bottom: 300px; /* スクロールの底打ちを防止するための下部マージン */
+}
 
 /* 詳細モーダル（ダイアログ） */
 .modal-overlay {
@@ -848,7 +852,7 @@ a.tag:hover {
   .calendar-day-cell {
     padding: 4px 1px 2px !important;
     border-radius: 6px !important;
-    min-height: 60px !important;
+    min-height: 80px !important;
   }
   
   /* 日付数字のサイズと位置微調整 */

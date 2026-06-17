@@ -213,6 +213,17 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
     setSelectedDate(dateStr);
     const dayEvents = eventMap[dateStr] || [];
     setModalEvents(dayEvents);
+
+    // DOMの描画完了（高さ確定）を確実に待ってから絶対位置へスクロール
+    setTimeout(() => {
+      const element = document.getElementById('selected-day-events');
+      if (element) {
+        const rect = element.getBoundingClientRect();
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const targetY = rect.top + scrollTop - 140; // 固定ヘッダー（約120px）＋余白を考慮したマージン
+        window.scrollTo({ top: targetY, behavior: 'smooth' });
+      }
+    }, 100);
   };
 
   const handleModalFavToggle = (id: string) => {
@@ -304,7 +315,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
                 <span className="day-number" style={isSelected ? { color: 'var(--color-primary-dark)' } : {}}>{day}</span>
                 {hasEvents && (
                   <div className="calendar-event-list-mini">
-                    {dayEvents.slice(0, 3).map((ev) => (
+                    {dayEvents.slice(0, 4).map((ev) => (
                       <div 
                         key={ev.id} 
                         className={`calendar-event-label ${getFacilityClass(ev.facility)}`}
@@ -312,9 +323,9 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
                         {ev.title}
                       </div>
                     ))}
-                    {dayEvents.length > 3 && (
+                    {dayEvents.length > 4 && (
                       <div className="calendar-event-label" style={{ background: '#f1ede9', color: 'var(--color-text-sub)', textAlign: 'center', fontSize: '0.45rem', padding: '1px 2px' }}>
-                        +{dayEvents.length - 3}件
+                        +{dayEvents.length - 4}件
                       </div>
                     )}
                   </div>
@@ -325,7 +336,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
         </div>
       </div>
 
-      <div className="calendar-selected-day-events" style={{ marginTop: '24px' }}>
+      <div id="selected-day-events" className="calendar-selected-day-events" style={{ marginTop: '24px' }}>
         {selectedDate ? (
           <div>
             <h3 style={{ 
