@@ -1,6 +1,7 @@
-import React from 'react';
-import { Clock, MapPin, User, FileText, Heart, Coins, ExternalLink } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Clock, MapPin, User, FileText, Heart, Coins, ExternalLink, CalendarPlus } from 'lucide-react';
 import { BabyEvent } from '../utils/csvParser';
+import { generateGoogleCalendarUrl, downloadIcsFile } from '../utils/calendarIntegration';
 
 interface ListViewProps {
   events: BabyEvent[];
@@ -72,6 +73,21 @@ export const ListView: React.FC<ListViewProps> = ({
   favorites,
   onToggleFavorite,
 }) => {
+  const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const handleOutsideClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('.calendar-export-container')) {
+        setActiveMenuId(null);
+      }
+    };
+    document.addEventListener('click', handleOutsideClick);
+    return () => {
+      document.removeEventListener('click', handleOutsideClick);
+    };
+  }, []);
+
   if (events.length === 0) {
     return (
       <div className="empty-state">
@@ -155,13 +171,50 @@ export const ListView: React.FC<ListViewProps> = ({
             </div>
           </div>
 
-          <button 
-            className={`fav-btn ${isFav ? 'active' : ''}`}
-            onClick={() => onToggleFavorite(event.id)}
-            aria-label="お気に入り登録"
-          >
-            <Heart size={20} fill={isFav ? 'currentColor' : 'none'} />
-          </button>
+          <div className="event-action-group">
+            <div className="calendar-export-container">
+              <button 
+                className={`calendar-export-btn ${activeMenuId === event.id ? 'active' : ''}`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setActiveMenuId(activeMenuId === event.id ? null : event.id);
+                }}
+                aria-label="カレンダーに登録"
+              >
+                <CalendarPlus size={20} />
+              </button>
+              {activeMenuId === event.id && (
+                <div className="calendar-export-menu">
+                  <a 
+                    href={generateGoogleCalendarUrl(event)} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="menu-item"
+                    onClick={() => setActiveMenuId(null)}
+                  >
+                    Googleカレンダーに追加
+                  </a>
+                  <button 
+                    className="menu-item"
+                    onClick={() => {
+                      downloadIcsFile(event);
+                      setActiveMenuId(null);
+                    }}
+                  >
+                    iCalファイルを保存 (.ics)
+                  </button>
+                </div>
+              )}
+            </div>
+
+            <button 
+              className={`fav-btn ${isFav ? 'active' : ''}`}
+              onClick={() => onToggleFavorite(event.id)}
+              aria-label="お気に入り登録"
+            >
+              <Heart size={20} fill={isFav ? 'currentColor' : 'none'} />
+            </button>
+          </div>
         </div>
 
         <div className="event-meta-list">

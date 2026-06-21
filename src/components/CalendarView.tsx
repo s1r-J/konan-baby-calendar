@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Clock, MapPin, Heart, User, FileText, Coins, ExternalLink } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Clock, MapPin, Heart, User, FileText, Coins, ExternalLink, CalendarPlus } from 'lucide-react';
 import { BabyEvent } from '../utils/csvParser';
+import { generateGoogleCalendarUrl, downloadIcsFile } from '../utils/calendarIntegration';
 
 interface CalendarViewProps {
   events: BabyEvent[];
@@ -98,6 +99,22 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
   const [selectedDate, setSelectedDate] = useState<string | null>(getTodayStr());
   const [modalEvents, setModalEvents] = useState<BabyEvent[]>([]);
   const [eventMap, setEventMap] = useState<Record<string, BabyEvent[]>>({});
+
+  // カレンダー登録メニューの開閉状態
+  const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const handleOutsideClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('.calendar-export-container')) {
+        setActiveMenuId(null);
+      }
+    };
+    document.addEventListener('click', handleOutsideClick);
+    return () => {
+      document.removeEventListener('click', handleOutsideClick);
+    };
+  }, []);
 
   // スワイプ操作による月切り替えのステート (PointerEventベース)
   const [pointerStartX, setPointerStartX] = useState<number | null>(null);
@@ -441,13 +458,50 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
                             )}
                           </div>
                         </div>
-                        <button 
-                          className={`fav-btn ${isFav ? 'active' : ''}`}
-                          onClick={() => handleModalFavToggle(event.id)}
-                          aria-label="お気に入り登録"
-                        >
-                          <Heart size={18} fill={isFav ? 'currentColor' : 'none'} />
-                        </button>
+                        <div className="event-action-group">
+                          <div className="calendar-export-container">
+                            <button 
+                              className={`calendar-export-btn ${activeMenuId === event.id ? 'active' : ''}`}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setActiveMenuId(activeMenuId === event.id ? null : event.id);
+                              }}
+                              aria-label="カレンダーに登録"
+                            >
+                              <CalendarPlus size={18} />
+                            </button>
+                            {activeMenuId === event.id && (
+                              <div className="calendar-export-menu">
+                                <a 
+                                  href={generateGoogleCalendarUrl(event)} 
+                                  target="_blank" 
+                                  rel="noopener noreferrer"
+                                  className="menu-item"
+                                  onClick={() => setActiveMenuId(null)}
+                                >
+                                  Googleカレンダーに追加
+                                </a>
+                                <button 
+                                  className="menu-item"
+                                  onClick={() => {
+                                    downloadIcsFile(event);
+                                    setActiveMenuId(null);
+                                  }}
+                                >
+                                  iCalファイルを保存 (.ics)
+                                </button>
+                              </div>
+                            )}
+                          </div>
+
+                          <button 
+                            className={`fav-btn ${isFav ? 'active' : ''}`}
+                            onClick={() => handleModalFavToggle(event.id)}
+                            aria-label="お気に入り登録"
+                          >
+                            <Heart size={18} fill={isFav ? 'currentColor' : 'none'} />
+                          </button>
+                        </div>
                       </div>
 
                       <div className="event-meta-list">
