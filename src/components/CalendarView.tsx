@@ -99,6 +99,50 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
   const [modalEvents, setModalEvents] = useState<BabyEvent[]>([]);
   const [eventMap, setEventMap] = useState<Record<string, BabyEvent[]>>({});
 
+  // スワイプ操作による月切り替えのステート (PointerEventベース)
+  const [pointerStartX, setPointerStartX] = useState<number | null>(null);
+  const [pointerStartY, setPointerStartY] = useState<number | null>(null);
+  const [pointerEndX, setPointerEndX] = useState<number | null>(null);
+  const [pointerEndY, setPointerEndY] = useState<number | null>(null);
+  const [isPointerDown, setIsPointerDown] = useState<boolean>(false);
+
+  const handlePointerDown = (e: React.PointerEvent) => {
+    // 左右スワイプを検知するため、ポインターの初期位置を記録
+    setPointerEndX(null);
+    setPointerEndY(null);
+    setPointerStartX(e.clientX);
+    setPointerStartY(e.clientY);
+    setIsPointerDown(true);
+    // スムーズなドラッグのため、ポインターキャプチャを設定
+    (e.target as HTMLElement).setPointerCapture(e.pointerId);
+  };
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (!isPointerDown) return;
+    setPointerEndX(e.clientX);
+    setPointerEndY(e.clientY);
+  };
+
+  const handlePointerUp = (e: React.PointerEvent) => {
+    if (!isPointerDown) return;
+    setIsPointerDown(false);
+    (e.target as HTMLElement).releasePointerCapture(e.pointerId);
+
+    if (pointerStartX === null || pointerStartY === null || pointerEndX === null || pointerEndY === null) return;
+    const diffX = pointerStartX - pointerEndX;
+    const diffY = pointerStartY - pointerEndY;
+    const minSwipeDistance = 50;
+
+    // X軸（横方向）の移動量がY軸（縦方向）より大きく、かつ一定距離（50px）以上移動した場合のみ判定
+    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > minSwipeDistance) {
+      if (diffX > 0) {
+        handleNextMonth();
+      } else {
+        handlePrevMonth();
+      }
+    }
+  };
+
   useEffect(() => {
     const map: Record<string, BabyEvent[]> = {};
     events.forEach((event) => {
@@ -251,7 +295,13 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
 
   return (
     <div className="calendar-view-wrapper">
-      <div className="calendar-container">
+      <div 
+        className="calendar-container"
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        style={{ touchAction: 'pan-y' }}
+      >
         <div className="calendar-header">
           <button 
             onClick={handlePrevMonth} 

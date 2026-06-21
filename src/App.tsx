@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { CalendarDays, List, Heart, Filter, ChevronDown, ChevronUp, AlertTriangle, X } from 'lucide-react';
 import { loadEvents, BabyEvent } from './utils/csvParser';
 import { CalendarView } from './components/CalendarView';
@@ -15,6 +15,25 @@ export default function App() {
   const [filteredEvents, setFilteredEvents] = useState<BabyEvent[]>([]);
   const [favorites, setFavorites] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState<TabType>('calendar');
+
+  const mainContentRef = useRef<HTMLElement>(null);
+
+  // タブ切り替え時にスクロール位置を最上部にリセット
+  useEffect(() => {
+    const resetScroll = () => {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      if (mainContentRef.current) {
+        mainContentRef.current.scrollTop = 0;
+      }
+    };
+
+    resetScroll();
+    // レンダリング完了後に実行されるようにタイマーを使用
+    const timer = setTimeout(resetScroll, 50);
+    return () => clearTimeout(timer);
+  }, [activeTab]);
 
   // フィルター状態
   const [targetFilter, setTargetFilter] = useState<TargetFilterType>('all');
@@ -205,7 +224,7 @@ export default function App() {
       </header>
 
       {/* メインコンテンツ */}
-      <main className="main-content">
+      <main ref={mainContentRef} className="main-content">
         {/* フィルターアコーディオンカード */}
         <div className={`filter-card-container ${isFilterOpen ? 'open' : ''} ${hasActiveFilter ? 'has-active' : ''}`}>
           <div className="filter-toggle-row">
