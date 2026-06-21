@@ -788,6 +788,15 @@ a.tag:hover {
   color: var(--color-text-main) !important;
 }
 
+/* 施設フィルター用のアクティブチップのボーダー・シャドウ調整（カレンダー色との同調） */
+.chip.active.loc-badge-hacchi { border-color: #2e7d32 !important; box-shadow: 0 4px 10px rgba(46, 125, 50, 0.15); }
+.chip.active.loc-badge-satellite { border-color: #c2185b !important; box-shadow: 0 4px 10px rgba(194, 24, 91, 0.15); }
+.chip.active.loc-badge-hishita { border-color: #e65100 !important; box-shadow: 0 4px 10px rgba(230, 81, 0, 0.15); }
+.chip.active.loc-badge-isopiyo { border-color: #a76a00 !important; box-shadow: 0 4px 10px rgba(167, 106, 0, 0.15); }
+.chip.active.loc-badge-byobugaura { border-color: #1565c0 !important; box-shadow: 0 4px 10px rgba(21, 101, 192, 0.15); }
+.chip.active.loc-badge-yokodai { border-color: #7b1fa2 !important; box-shadow: 0 4px 10px rgba(123, 31, 162, 0.15); }
+.chip.active.loc-badge-default { border-color: var(--color-text-sub) !important; box-shadow: none; }
+
 /* カレンダーのドット色分け */
 .dot-hacchi { background-color: #4caf50 !important; } /* 緑 */
 .dot-satellite { background-color: #e91e63 !important; } /* 濃いピンク */

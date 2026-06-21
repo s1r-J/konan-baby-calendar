@@ -10,6 +10,28 @@ type TargetFilterType = 'all' | '6months' | '0yo' | '1yo' | '2yo' | '3yo+' | 'pa
 type SignupFilterType = 'all' | 'required' | 'notRequired';
 type FeeFilterType = 'all' | 'free' | 'paid'; // 参加費フィルターの型定義を追加
 
+const getFacilityClass = (facility: string) => {
+  if (facility.includes('はっちサテライト') || facility.includes('サテライト')) {
+    return 'loc-badge-satellite';
+  }
+  if (facility.includes('はっち')) {
+    return 'loc-badge-hacchi';
+  }
+  if (facility.includes('日下')) {
+    return 'loc-badge-hishita';
+  }
+  if (facility.includes('いそピヨ')) {
+    return 'loc-badge-isopiyo';
+  }
+  if (facility.includes('屏風') || facility.includes('屛風')) {
+    return 'loc-badge-byobugaura';
+  }
+  if (facility.includes('洋光台')) {
+    return 'loc-badge-yokodai';
+  }
+  return 'loc-badge-default';
+};
+
 export default function App() {
   const [allEvents, setAllEvents] = useState<BabyEvent[]>([]);
   const [filteredEvents, setFilteredEvents] = useState<BabyEvent[]>([]);
@@ -323,15 +345,19 @@ export default function App() {
                 >
                   すべて
                 </button>
-                {uniqueFacilities.map((fac) => (
-                  <button
-                    key={fac}
-                    className={`chip blue ${facilityFilter === fac ? 'active' : ''}`}
-                    onClick={() => setFacilityFilter(fac)}
-                  >
-                    {fac}
-                  </button>
-                ))}
+                {uniqueFacilities.map((fac) => {
+                  const isActive = facilityFilter === fac;
+                  const facilityClass = getFacilityClass(fac);
+                  return (
+                    <button
+                      key={fac}
+                      className={`chip ${isActive ? `active ${facilityClass}` : ''}`}
+                      onClick={() => setFacilityFilter(fac)}
+                    >
+                      {fac}
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
