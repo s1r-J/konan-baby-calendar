@@ -24,6 +24,23 @@ export interface BabyEvent {
 }
 
 /**
+ * 日付文字列を YYYY/MM/DD 形式（ゼロ埋め2桁）に標準化します。
+ * ハイフン区切りもスラッシュ区切りに統一し、1桁の月日は2桁に変換します。
+ */
+export const standardizeDate = (dateStr: string): string => {
+  if (!dateStr) return '';
+  const normalized = dateStr.trim().replace(/-/g, '/');
+  const parts = normalized.split('/');
+  if (parts.length === 3) {
+    const y = parts[0];
+    const m = parts[1].padStart(2, '0');
+    const d = parts[2].padStart(2, '0');
+    return `${y}/${m}/${d}`;
+  }
+  return normalized;
+};
+
+/**
  * CSVテキストをパースしてイベント配列を返す
  */
 export const loadEvents = (): BabyEvent[] => {
@@ -38,7 +55,8 @@ export const loadEvents = (): BabyEvent[] => {
 
   // スプレッドシートのヘッダー名と一致するキーでマッピング
   return (parsed.data as any[]).map((row) => {
-    const date = row['日付']?.trim() || '';
+    const rawDate = row['日付']?.trim() || '';
+    const date = standardizeDate(rawDate);
     const title = row['イベント名']?.trim() || '';
     const facility = row['施設名']?.trim() || '';
     const startTime = row['開始時刻']?.trim() || '';
