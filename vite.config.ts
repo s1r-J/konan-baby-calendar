@@ -16,6 +16,10 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'prompt',
+      workbox: {
+        skipWaiting: true,
+        clientsClaim: true,
+      },
       includeAssets: ['favicon.ico', 'logo.png', 'pwa-192x192.png', 'pwa-512x512.png'],
       manifest: {
         name: 'sasage baby calendar',
