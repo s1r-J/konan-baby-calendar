@@ -1087,3 +1087,98 @@ a.tag:hover {
   color: var(--color-text-main);
 }
 
+/* PWA更新通知プロンプト (トースト) */
+.pwa-update-prompt {
+  position: fixed;
+  bottom: 100px; /* ボトムナビゲーション(90px)の上部に配置 */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 500px;
+  background: var(--color-primary-light);
+  border: 1px solid rgba(255, 138, 117, 0.3);
+  border-radius: 16px;
+  padding: 12px 16px;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  z-index: 1000;
+  animation: slideUpFade 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+}
+
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 20px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+.pwa-update-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+.pwa-update-message {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--color-primary-dark);
+  line-height: 1.4;
+}
+
+.pwa-update-btn {
+  background: var(--color-primary);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--transition-smooth);
+  white-space: nowrap;
+}
+
+.pwa-update-btn:hover {
+  background: var(--color-primary-dark);
+}
+
+.pwa-update-btn .spin-icon {
+  animation: rotateIcon 4s linear infinite;
+}
+
+@keyframes rotateIcon {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.pwa-update-close {
+  background: transparent;
+  border: none;
+  color: var(--color-text-sub);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: var(--transition-smooth);
+}
+
+.pwa-update-close:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--color-text-main);
+}
+
+
