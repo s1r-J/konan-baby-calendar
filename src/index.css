@@ -797,6 +797,10 @@ a.tag:hover {
   background-color: #f3e5f5 !important; /* 薄い紫 */
   color: #7b1fa2 !important; /* 濃い紫 */
 }
+.loc-badge-willing {
+  background-color: #e0f2f1 !important; /* 薄いティール */
+  color: #00695c !important; /* 濃いティール */
+}
 .loc-badge-default {
   background-color: #f1ede9 !important; /* 薄いグレー */
   color: var(--color-text-main) !important;
@@ -809,6 +813,7 @@ a.tag:hover {
 .chip.active.loc-badge-isopiyo { border-color: #a76a00 !important; box-shadow: 0 4px 10px rgba(167, 106, 0, 0.15); }
 .chip.active.loc-badge-byobugaura { border-color: #1565c0 !important; box-shadow: 0 4px 10px rgba(21, 101, 192, 0.15); }
 .chip.active.loc-badge-yokodai { border-color: #7b1fa2 !important; box-shadow: 0 4px 10px rgba(123, 31, 162, 0.15); }
+.chip.active.loc-badge-willing { border-color: #00695c !important; box-shadow: 0 4px 10px rgba(0, 105, 92, 0.15); }
 .chip.active.loc-badge-default { border-color: var(--color-text-sub) !important; box-shadow: none; }
 
 /* カレンダーのドット色分け */

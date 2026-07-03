@@ -30,6 +30,9 @@ const getFacilityClass = (facility: string) => {
   if (facility.includes('洋光台')) {
     return 'loc-badge-yokodai';
   }
+  if (facility.includes('ウィリング')) {
+    return 'loc-badge-willing';
+  }
   return 'loc-badge-default';
 };
 
