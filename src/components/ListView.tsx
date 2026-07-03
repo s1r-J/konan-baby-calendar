@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Clock, MapPin, User, FileText, Heart, Coins, ExternalLink, CalendarPlus } from 'lucide-react';
+import { Clock, MapPin, User, FileText, Heart, Coins, ExternalLink, CalendarPlus, Send } from 'lucide-react';
 import { BabyEvent } from '../utils/csvParser';
 import { generateGoogleCalendarUrl, downloadIcsFile } from '../utils/calendarIntegration';
+import { generateLineShareUrl } from '../utils/shareIntegration';
 
 interface ListViewProps {
   events: BabyEvent[];
@@ -205,7 +206,7 @@ export const ListView: React.FC<ListViewProps> = ({
                 }}
                 aria-label="カレンダーに登録"
               >
-                <CalendarPlus size={20} />
+                <CalendarPlus size={18} />
               </button>
               {activeMenuId === event.id && (
                 <div className="calendar-export-menu">
@@ -231,12 +232,22 @@ export const ListView: React.FC<ListViewProps> = ({
               )}
             </div>
 
+            <a 
+              href={generateLineShareUrl(event)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="line-share-btn"
+              aria-label="LINEで送る"
+            >
+              <Send size={18} />
+            </a>
+
             <button 
               className={`fav-btn ${isFav ? 'active' : ''}`}
               onClick={() => onToggleFavorite(event.id)}
               aria-label="お気に入り登録"
             >
-              <Heart size={20} fill={isFav ? 'currentColor' : 'none'} />
+              <Heart size={18} fill={isFav ? 'currentColor' : 'none'} />
             </button>
           </div>
         </div>

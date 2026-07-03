@@ -407,29 +407,58 @@ a.tag:hover {
   color: #c62828;
 }
 
-/* お気に入りボタン */
+/* 3つのアクションボタン（カレンダー登録、LINE共有、お気に入り）の共通スタイル */
+.calendar-export-btn,
+.line-share-btn,
 .fav-btn {
   background: none;
   border: none;
   cursor: pointer;
-  color: #ccc;
+  color: var(--color-text-sub) !important; /* 通常時のグレーカラー統一 */
   transition: var(--transition-bounce);
-  padding: 4px;
+  padding: 0; /* paddingをゼロにして高さを完全固定 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  text-decoration: none; /* aタグ用のリセット */
+  box-sizing: border-box;
 }
 
+/* ホバー時のバウンス拡大 */
+.calendar-export-btn:hover,
+.line-share-btn:hover,
 .fav-btn:hover {
   transform: scale(1.15);
 }
 
+/* 各ボタンのホバー・アクティブ時の個別カラー & 背景 */
+.calendar-export-btn:hover {
+  color: var(--color-text-main) !important;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.line-share-btn:hover {
+  color: #06C755 !important; /* ホバー時にLINEグリーン */
+  background-color: rgba(6, 199, 85, 0.08); /* 薄い緑サークル */
+}
+
+.fav-btn:hover {
+  color: #e57373 !important; /* ホバー時にピンク */
+  background-color: rgba(229, 115, 115, 0.08); /* 薄いピンクサークル */
+}
+
 .fav-btn.active {
-  color: #e57373;
+  color: #e57373 !important; /* お気に入りアクティブ時のピンク */
 }
 
 /* アクションボタングループとカレンダー連携メニュー */
 .event-action-group {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 6px; /* ボタン同士の間隔を半分に調整 */
   align-self: flex-start;
   margin-top: -2px; /* 高さを調整 */
 }
@@ -438,22 +467,7 @@ a.tag:hover {
   position: relative;
 }
 
-.calendar-export-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--color-text-sub);
-  transition: var(--transition-bounce);
-  padding: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.calendar-export-btn:hover {
-  transform: scale(1.15);
-  color: var(--color-primary);
-}
+/* カレンダー登録ボタンの個別スタイルは共通設定に統合されました */
 
 .calendar-export-btn.active {
   color: var(--color-primary);

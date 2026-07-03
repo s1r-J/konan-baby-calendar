@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Clock, MapPin, Heart, User, FileText, Coins, ExternalLink, CalendarPlus } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Clock, MapPin, Heart, User, FileText, Coins, ExternalLink, CalendarPlus, Send } from 'lucide-react';
 import { BabyEvent } from '../utils/csvParser';
 import { generateGoogleCalendarUrl, downloadIcsFile } from '../utils/calendarIntegration';
+import { generateLineShareUrl } from '../utils/shareIntegration';
 
 interface CalendarViewProps {
   events: BabyEvent[];
@@ -106,9 +107,39 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
   };
   const { todayStr, tomorrowStr } = getTodayAndTomorrowStr();
 
-  const [currentYear, setCurrentYear] = useState<number>(today.getFullYear());
-  const [currentMonth, setCurrentMonth] = useState<number>(today.getMonth() + 1); // 1-12
-  const [selectedDate, setSelectedDate] = useState<string | null>(getTodayStr());
+  const getInitialCalendarState = () => {
+    const params = new URLSearchParams(window.location.search);
+    const dateParam = params.get('date');
+    
+    if (dateParam) {
+      const decodedDate = decodeURIComponent(dateParam).replace(/-/g, '/');
+      const parts = decodedDate.split('/');
+      if (parts.length === 3) {
+        const year = parseInt(parts[0], 10);
+        const month = parseInt(parts[1], 10);
+        const day = parseInt(parts[2], 10);
+        if (!isNaN(year) && !isNaN(month) && !isNaN(day)) {
+          return {
+            year,
+            month,
+            selectedDate: decodedDate
+          };
+        }
+      }
+    }
+
+    return {
+      year: today.getFullYear(),
+      month: today.getMonth() + 1,
+      selectedDate: getTodayStr()
+    };
+  };
+
+  const initialCalState = getInitialCalendarState();
+
+  const [currentYear, setCurrentYear] = useState<number>(initialCalState.year);
+  const [currentMonth, setCurrentMonth] = useState<number>(initialCalState.month); // 1-12
+  const [selectedDate, setSelectedDate] = useState<string | null>(initialCalState.selectedDate);
   const [modalEvents, setModalEvents] = useState<BabyEvent[]>([]);
   const [eventMap, setEventMap] = useState<Record<string, BabyEvent[]>>({});
 
@@ -126,6 +157,22 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
     return () => {
       document.removeEventListener('click', handleOutsideClick);
     };
+  }, []);
+
+  // 起動時の日付パラメータ指定時のスクロール処理
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('date') && selectedDate) {
+      setTimeout(() => {
+        const element = document.getElementById('selected-day-events');
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+          const targetY = rect.top + scrollTop - 140;
+          window.scrollTo({ top: targetY, behavior: 'smooth' });
+        }
+      }, 500);
+    }
   }, []);
 
   // スワイプ操作による月切り替えのステート (PointerEventベース)
@@ -514,6 +561,16 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
                               </div>
                             )}
                           </div>
+
+                          <a 
+                            href={generateLineShareUrl(event)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="line-share-btn"
+                            aria-label="LINEで送る"
+                          >
+                            <Send size={18} />
+                          </a>
 
                           <button 
                             className={`fav-btn ${isFav ? 'active' : ''}`}

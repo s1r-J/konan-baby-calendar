@@ -69,6 +69,14 @@ export default function App() {
   
   const [uniqueFacilities, setUniqueFacilities] = useState<string[]>([]);
 
+  // URLに日付パラメータがある場合は初期表示タブをカレンダーに強制
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('date')) {
+      setActiveTab('calendar');
+    }
+  }, []);
+
   // 初期ロード
   useEffect(() => {
     const events = loadEvents();
