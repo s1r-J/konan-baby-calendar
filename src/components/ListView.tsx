@@ -75,6 +75,23 @@ export const ListView: React.FC<ListViewProps> = ({
 }) => {
   const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
 
+  const getTodayAndTomorrowStr = () => {
+    const t = new Date();
+    const format = (d: Date) => {
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${y}/${m}/${day}`;
+    };
+    const tomorrow = new Date(t);
+    tomorrow.setDate(t.getDate() + 1);
+    return {
+      todayStr: format(t),
+      tomorrowStr: format(tomorrow)
+    };
+  };
+  const { todayStr, tomorrowStr } = getTodayAndTomorrowStr();
+
   useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
@@ -126,6 +143,9 @@ export const ListView: React.FC<ListViewProps> = ({
     const isFav = favorites.includes(event.id);
     const { month, day } = formatDateBadge(event.date);
     const isSignupRequired = event.requiredSignup.includes('申込') || event.requiredSignup.includes('予約制');
+    const normEventDate = event.date.replace(/-/g, '/');
+    const isTodayEvent = normEventDate === todayStr;
+    const isTomorrowEvent = normEventDate === tomorrowStr;
 
     return (
       <div key={event.id} className="event-card">
@@ -137,7 +157,11 @@ export const ListView: React.FC<ListViewProps> = ({
           </div>
           
           <div className="event-info">
-            <h3 className="event-title">{event.title}</h3>
+            <h3 className="event-title" style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+              <span>{event.title}</span>
+              {isTodayEvent && <span className="event-badge-today">本日開催！</span>}
+              {isTomorrowEvent && <span className="event-badge-tomorrow">明日開催</span>}
+            </h3>
             
             <div className="event-tags">
               {event.facility && (

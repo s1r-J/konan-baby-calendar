@@ -94,6 +94,18 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
     return `${y}/${m}/${d}`;
   };
 
+  const getTodayAndTomorrowStr = () => {
+    const format = (d: Date) => 
+      `${d.getFullYear()}/${String(d.getMonth() + 1).padStart(2, '0')}/${String(d.getDate()).padStart(2, '0')}`;
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+    return {
+      todayStr: format(today),
+      tomorrowStr: format(tomorrow)
+    };
+  };
+  const { todayStr, tomorrowStr } = getTodayAndTomorrowStr();
+
   const [currentYear, setCurrentYear] = useState<number>(today.getFullYear());
   const [currentMonth, setCurrentMonth] = useState<number>(today.getMonth() + 1); // 1-12
   const [selectedDate, setSelectedDate] = useState<string | null>(getTodayStr());
@@ -359,11 +371,13 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
             const dayEvents = eventMap[dateStr] || [];
             const hasEvents = dayEvents.length > 0;
             const isSelected = selectedDate === dateStr;
+            const isToday = todayStr === dateStr;
             
             let cellClass = 'calendar-day-cell';
             if (!isCurrentMonth) cellClass += ' other-month';
             if (hasEvents) cellClass += ' has-events';
             if (isSelected) cellClass += ' selected';
+            if (isToday) cellClass += ' is-today';
             if (dayOfWeek === 0) cellClass += ' sunday';
             if (dayOfWeek === 6) cellClass += ' saturday';
 
@@ -421,12 +435,19 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
                 {modalEvents.map((event) => {
                   const isFav = favorites.includes(event.id);
                   const isSignupRequired = event.requiredSignup.includes('申込') || event.requiredSignup.includes('予約制');
+                  const normEventDate = event.date.replace(/-/g, '/');
+                  const isTodayEvent = normEventDate === todayStr;
+                  const isTomorrowEvent = normEventDate === tomorrowStr;
 
                   return (
                     <div key={event.id} className="event-card" style={{ margin: 0 }}>
                       <div className="event-header">
                         <div className="event-info">
-                          <h4 className="event-title" style={{ fontSize: '0.95rem' }}>{event.title}</h4>
+                          <h4 className="event-title" style={{ fontSize: '0.95rem', display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                            <span>{event.title}</span>
+                            {isTodayEvent && <span className="event-badge-today">本日開催！</span>}
+                            {isTomorrowEvent && <span className="event-badge-tomorrow">明日開催</span>}
+                          </h4>
                           <div className="event-tags" style={{ marginTop: '4px' }}>
                             {event.facility && (
                               getFacilityUrl(event.facility) ? (

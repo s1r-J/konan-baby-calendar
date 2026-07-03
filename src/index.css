@@ -1181,4 +1181,51 @@ a.tag:hover {
   color: var(--color-text-main);
 }
 
+/* カレンダー「今日」の強調表示 */
+.calendar-day-cell.is-today .day-number {
+  background: var(--color-primary);
+  color: #ffffff !important;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  box-shadow: 0 2px 4px rgba(255, 138, 117, 0.3);
+}
+
+/* カレンダー「今日」かつ「選択中」の特別な表示 */
+.calendar-day-cell.is-today.selected .day-number {
+  background: var(--color-primary-dark);
+}
+
+/* 本日開催！・明日開催バッジ */
+.event-badge-today {
+  background-color: #ff5252;
+  color: #ffffff;
+  font-size: 0.62rem;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+}
+
+.event-badge-tomorrow {
+  background-color: #ffa726;
+  color: #ffffff;
+  font-size: 0.62rem;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+}
+
+
 
