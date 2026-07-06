@@ -4,6 +4,7 @@ import { loadEvents, BabyEvent } from './utils/csvParser';
 import { CalendarView } from './components/CalendarView';
 import { ListView } from './components/ListView';
 import { PWAInstallPrompt } from './components/PWAInstallPrompt';
+import { useRegisterSW } from 'virtual:pwa-register/react';
 
 type TabType = 'calendar' | 'list' | 'favorite';
 type TargetFilterType = 'all' | '6months' | '0yo' | '1yo' | '2yo' | '3yo+' | 'papa' | 'pre_parent';
@@ -42,6 +43,18 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<TabType>('calendar');
 
   const mainContentRef = useRef<HTMLElement>(null);
+
+  // PWAの自動更新と定期チェック設定 (1時間おき)
+  useRegisterSW({
+    onRegistered(r) {
+      if (r) {
+        setInterval(() => {
+          r.update();
+        }, 60 * 60 * 1000);
+      }
+    },
+  });
+
 
   // タブ切り替え時にスクロール位置を最上部にリセット
   useEffect(() => {
