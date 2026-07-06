@@ -18,6 +18,7 @@ const FACILITY_URLS: Record<string, string> = {
   '屛風ヶ浦地域ケアプラザ': 'https://www.shinkoufukushikai.com/care/care-plaza/byobugaura',
   '屏風ヶ浦地域ケアプラザ': 'https://www.shinkoufukushikai.com/care/care-plaza/byobugaura',
   '洋光台地域ケアプラザ': 'https://www.y-chojukai.or.jp/youkoudai/',
+  'ウィリング横浜': 'https://www.yokohamashakyo.jp/willing/',
 };
 
 const getFacilityUrl = (facility: string): string | null => {
