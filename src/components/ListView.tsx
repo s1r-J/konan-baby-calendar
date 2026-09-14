@@ -307,6 +307,15 @@ export const ListView: React.FC<ListViewProps> = ({
     );
   };
 
+  if (events.length === 0) {
+    return (
+      <div className="empty-events-container">
+        <p className="empty-events-title">条件に該当するイベントが見つかりませんでした</p>
+        <p className="empty-events-desc">検索キーワードや絞り込み条件を変更してお試しください。</p>
+      </div>
+    );
+  }
+
   return (
     <div className="list-view-container">
       {/* 今日以降のイベント */}

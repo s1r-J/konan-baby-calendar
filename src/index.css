@@ -1247,5 +1247,112 @@ a.tag:hover {
   letter-spacing: 0.02em;
 }
 
+/* 検索セクション & 件数表示バッジ */
+.search-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.search-input-container {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  color: var(--color-text-sub);
+  pointer-events: none;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px 36px 10px 36px;
+  font-size: 0.85rem;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: #ffffff;
+  color: var(--color-text-main);
+  outline: none;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+}
+
+.search-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(255, 138, 117, 0.15);
+}
+
+.search-clear-btn {
+  position: absolute;
+  right: 8px;
+  background: #f0f0f0;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--color-text-sub);
+  transition: all 0.15s ease;
+}
+
+.search-clear-btn:hover {
+  background: var(--color-border);
+  color: var(--color-text-main);
+}
+
+.search-result-count-badge {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+  background: linear-gradient(135deg, #fff0ed 0%, #fff7f5 100%);
+  border: 1px solid rgba(255, 138, 117, 0.3);
+  border-radius: 12px;
+  padding: 8px 12px;
+  white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(255, 138, 117, 0.08);
+}
+
+.search-result-count-badge .count-number {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--color-primary-dark, #e0533c);
+}
+
+.search-result-count-badge .count-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--color-text-sub);
+}
+
+/* 検索結果件数0件時のスタイル */
+.empty-events-container {
+  text-align: center;
+  padding: 40px 16px;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px dashed var(--color-border, #e0e0e0);
+  margin: 16px 0;
+}
+
+.empty-events-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--color-text-main);
+  margin-bottom: 6px;
+}
+
+.empty-events-desc {
+  font-size: 0.8rem;
+  color: var(--color-text-sub);
+}
+
 
 

@@ -177,6 +177,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
         }
       }, 500);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // スワイプ操作による月切り替えのステート (PointerEventベース)

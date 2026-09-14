@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { CalendarDays, List, Heart, Filter, ChevronDown, ChevronUp, AlertTriangle, X } from 'lucide-react';
+import { CalendarDays, List, Heart, Filter, ChevronDown, ChevronUp, AlertTriangle, X, Search } from 'lucide-react';
 import { loadEvents, BabyEvent } from './utils/csvParser';
 import { CalendarView } from './components/CalendarView';
 import { ListView } from './components/ListView';
@@ -41,6 +41,7 @@ export default function App() {
   const [filteredEvents, setFilteredEvents] = useState<BabyEvent[]>([]);
   const [favorites, setFavorites] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState<TabType>('calendar');
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   const mainContentRef = useRef<HTMLElement>(null);
 
@@ -149,6 +150,9 @@ export default function App() {
     localStorage.setItem('baby-calendar-favs', JSON.stringify(newFavs));
   };
 
+  // キーワード正規化関数
+  const normalizeText = (text: string) => (text ? text.toLowerCase().normalize('NFKC').trim() : '');
+
   // フィルタリング処理
   useEffect(() => {
     let result = [...allEvents];
@@ -156,6 +160,17 @@ export default function App() {
     // タブが「お気に入り」の場合はお気に入りのみ
     if (activeTab === 'favorite') {
       result = result.filter((event) => favorites.includes(event.id));
+    }
+
+    // キーワード部分一致検索（イベント名・開催場所・備考）
+    if (searchQuery.trim() !== '') {
+      const query = normalizeText(searchQuery);
+      result = result.filter((event) => {
+        const title = normalizeText(event.title);
+        const location = normalizeText(event.location);
+        const remarks = normalizeText(event.remarks);
+        return title.includes(query) || location.includes(query) || remarks.includes(query);
+      });
     }
 
     // 対象年齢フィルター
@@ -220,10 +235,10 @@ export default function App() {
     }
 
     setFilteredEvents(result);
-  }, [allEvents, activeTab, targetFilter, facilityFilter, signupFilter, feeFilter, favorites]);
+  }, [allEvents, activeTab, searchQuery, targetFilter, facilityFilter, signupFilter, feeFilter, favorites]);
 
   // アクティブなフィルターがあるかどうかを判定
-  const hasActiveFilter = targetFilter !== 'all' || facilityFilter !== 'all' || signupFilter !== 'all' || feeFilter !== 'all';
+  const hasActiveFilter = searchQuery.trim() !== '' || targetFilter !== 'all' || facilityFilter !== 'all' || signupFilter !== 'all' || feeFilter !== 'all';
 
   return (
     <div className="app-container">
@@ -271,6 +286,33 @@ export default function App() {
 
       {/* メインコンテンツ */}
       <main ref={mainContentRef} className="main-content">
+        {/* 検索キーワード入力バー & 件数表示 */}
+        <div className="search-section">
+          <div className="search-input-container">
+            <Search size={16} className="search-icon" />
+            <input
+              type="text"
+              className="search-input"
+              placeholder="イベント名・場所・備考のキーワード検索..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            {searchQuery && (
+              <button 
+                className="search-clear-btn" 
+                onClick={() => setSearchQuery('')}
+                aria-label="検索キーワードをクリア"
+              >
+                <X size={14} />
+              </button>
+            )}
+          </div>
+          <div className="search-result-count-badge">
+            <span className="count-number">{filteredEvents.length}</span>
+            <span className="count-label">件</span>
+          </div>
+        </div>
+
         {/* フィルターアコーディオンカード */}
         <div className={`filter-card-container ${isFilterOpen ? 'open' : ''} ${hasActiveFilter ? 'has-active' : ''}`}>
           <div className="filter-toggle-row">
@@ -290,6 +332,7 @@ export default function App() {
               <button 
                 className="filter-clear-btn-new"
                 onClick={() => {
+                  setSearchQuery('');
                   setTargetFilter('all');
                   setFacilityFilter('all');
                   setSignupFilter('all');
