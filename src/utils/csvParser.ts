@@ -54,7 +54,7 @@ export const loadEvents = (): BabyEvent[] => {
   }
 
   // スプレッドシートのヘッダー名と一致するキーでマッピング
-  return (parsed.data as any[]).map((row) => {
+  return (parsed.data as Record<string, string>[]).map((row) => {
     const rawDate = row['日付']?.trim() || '';
     const date = standardizeDate(rawDate);
     const title = row['イベント名']?.trim() || '';

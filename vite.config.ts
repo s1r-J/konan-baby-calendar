@@ -5,8 +5,7 @@ import { webcrypto } from 'node:crypto'
 
 // Node 18以下向けのグローバル crypto ポリフィル (Rollupの依存モジュール対策)
 if (typeof globalThis.crypto === 'undefined') {
-  // @ts-ignore
-  globalThis.crypto = webcrypto
+  (globalThis as unknown as { crypto: typeof webcrypto }).crypto = webcrypto
 }
 
 // https://vite.dev/config/

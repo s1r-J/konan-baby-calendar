@@ -1,16 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { X, Download, Share } from 'lucide-react';
 
+interface BeforeInstallPromptEvent extends Event {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
+}
+
 export const PWAInstallPrompt: React.FC = () => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [promptType, setPromptType] = useState<'ios' | 'android_pc' | null>(null);
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
 
   useEffect(() => {
     // 1. すでにアプリモード（スタンドアロン）で起動しているか確認
     const isStandalone = 
       window.matchMedia('(display-mode: standalone)').matches ||
-      (window.navigator as any).standalone ||
+      (window.navigator as unknown as { standalone?: boolean }).standalone ||
       document.referrer.includes('android-app://');
 
     if (isStandalone) {
@@ -31,7 +36,7 @@ export const PWAInstallPrompt: React.FC = () => {
     }
 
     // 3. iOS (Safari) の判定
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as unknown as { MSStream?: unknown }).MSStream;
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
     if (isIOS && isSafari) {
@@ -46,7 +51,7 @@ export const PWAInstallPrompt: React.FC = () => {
     // 4. Android / PC (beforeinstallprompt イベント) のリッスン
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
-      setDeferredPrompt(e);
+      setDeferredPrompt(e as BeforeInstallPromptEvent);
       setPromptType('android_pc');
       // 少し待ってから表示
       setIsVisible(true);

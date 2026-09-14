@@ -206,7 +206,7 @@ export function downloadIcsFile(event: BabyEvent): void {
   
   // 安全なファイル名を作成
   const safeTitle = event.title.replace(/[\\/:*?"<>|]/g, '_');
-  const datePrefix = event.date.replace(/[\/-]/g, '');
+  const datePrefix = event.date.replace(/[/-]/g, '');
   const fileName = `${datePrefix}_${safeTitle}.ics`;
 
   const link = document.createElement('a');
