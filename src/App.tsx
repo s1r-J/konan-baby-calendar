@@ -4,6 +4,7 @@ import { loadEvents, BabyEvent } from './utils/csvParser';
 import { CalendarView } from './components/CalendarView';
 import { ListView } from './components/ListView';
 import { PWAInstallPrompt } from './components/PWAInstallPrompt';
+import { MigrationNoticeBanner } from './components/MigrationNoticeBanner';
 import { useRegisterSW } from 'virtual:pwa-register/react';
 
 type TabType = 'calendar' | 'list' | 'favorite';
@@ -242,6 +243,9 @@ export default function App() {
 
   return (
     <div className="app-container">
+      {/* サイトURL移行案内バナー (約2週間限定表示) */}
+      <MigrationNoticeBanner />
+
       {/* ヘッダー */}
       <header className="app-header">
         <div className="header-top">
